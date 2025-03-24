@@ -56,6 +56,7 @@ CSS3 → Estilização e responsividade
 
 📬 Contato
 Caso tenha alguma dúvida ou sugestão, entre em contato:
+
 Email: segundomarcius@gmail.com
 
 LinkedIn: https://www.linkedin.com/in/segundomarcius/
