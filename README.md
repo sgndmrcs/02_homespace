@@ -19,7 +19,30 @@ Este projeto consiste em um conjunto de páginas HTML estáticas, voltadas para 
 
 Temos também alguns prints dos códigos:
 
-![01 - Estrutura Básica](https://imgur.com/a/BRgequX)
+- 01 - Estrutura Básica
+![01 - Estrutura Básica](https://i.imgur.com/aQ9aylz.png)
+
+- 02 - Trabalhando com Textos
+![02 - Trabalhando com Textos](https://i.imgur.com/R3rLLMr.png)
+
+- 03 - Listas
+![03 - Listas](https://i.imgur.com/X1vG2Mx.png)
+
+- 04 - Links e Imagens
+![04 - Links e Imagens](https://i.imgur.com/wuRtsfp.png)
+
+- 05 - Formulários
+![05 - Formulários](https://i.imgur.com/8q4MWwD.png)
+
+- 06 - Tabelas
+![06 - Tabelas](https://i.imgur.com/NRLR7Ef.png)
+
+- 07 - Elementos Semânticos
+![07 - Elementos Semânticos](https://i.imgur.com/JeaMqHC.png)
+
+- 08 - Desafio
+![08 - Desafio](https://i.imgur.com/BYDwE3K.png)
+![08 - Desafio Part2](https://i.imgur.com/yEPrs2I.png)
 
 ---
 
