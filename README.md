@@ -19,7 +19,7 @@ Este projeto consiste em um conjunto de páginas HTML estáticas, voltadas para 
 
 Temos também alguns prints dos códigos:
 
-![Imagem do Projeto](URL_DA_IMAGEM)
+![01 - Estrutura Básica](https://imgur.com/a/BRgequX)
 
 ---
 
