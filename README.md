@@ -51,12 +51,15 @@ Temos também alguns prints dos códigos:
 O projeto foi desenvolvido com as seguintes tecnologias:
 
 HTML5 → Estrutura do site
+
 CSS3 → Estilização e responsividade
 
 📬 Contato
 Caso tenha alguma dúvida ou sugestão, entre em contato:
 Email: segundomarcius@gmail.com
+
 LinkedIn: https://www.linkedin.com/in/segundomarcius/
+
 GitHub: https://github.com/sgndmrcs/02_homespace
 
 ---
