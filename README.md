@@ -44,7 +44,8 @@ Temos também alguns prints dos códigos:
  ┣ 📜 6_tabelas.html
  ┣ 📜 7_elementos_semanticos.html
  ┗ 📜 8_desafio_cv.html
-```plaintext
+```
+---
 
  🚀 Tecnologias Utilizadas
 O projeto foi desenvolvido com as seguintes tecnologias:
@@ -57,3 +58,6 @@ Caso tenha alguma dúvida ou sugestão, entre em contato:
 Email: segundomarcius@gmail.com
 LinkedIn: https://www.linkedin.com/in/segundomarcius/
 GitHub: https://github.com/sgndmrcs/02_homespace
+
+---
+
