@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1c3d5a">
+  <meta name="description" content="Calculadora de escadas de concreto armado: geometria NBR 9050, cargas, esforços, armaduras, detalhamento e visualização em Realidade Aumentada.">
+  <title>Calculadora de Escadas</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icone.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <header class="topo">
+    <div class="marca">
+      <img src="icons/icone.svg" alt="" width="32" height="32">
+      <div>
+        <h1>Calculadora de Escadas</h1>
+        <p>Concreto armado · NBR 9050 · NBR 6120 · NBR 6118</p>
+      </div>
+    </div>
+    <div class="acoes-topo">
+      <button type="button" class="botao" id="bt-salvar" title="Baixar projeto (.json)">Salvar</button>
+      <label class="botao" title="Abrir projeto (.json)">Abrir<input type="file" id="in-abrir" accept="application/json,.json" hidden></label>
+      <button type="button" class="botao" id="bt-imprimir" title="Imprimir / PDF">Imprimir</button>
+    </div>
+  </header>
+
+  <nav class="abas" role="tablist" aria-label="Seções">
+    <button role="tab" data-aba="dados" aria-selected="true">Dados</button>
+    <button role="tab" data-aba="ar" aria-selected="false">3D / AR</button>
+    <button role="tab" data-aba="resultados" aria-selected="false">Resultados</button>
+    <button role="tab" data-aba="detalhamento" aria-selected="false">Detalhamento</button>
+    <button role="tab" data-aba="memorial" aria-selected="false">Memorial</button>
+  </nav>
+
+  <main>
+    <!-- ============================== DADOS -->
+    <section id="aba-dados" class="aba ativa" role="tabpanel">
+      <form id="form" autocomplete="off">
+        <fieldset>
+          <legend>1. Modelo de escada</legend>
+          <div class="modelos" id="modelos"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>2. Geometria</legend>
+          <div class="grade-campos">
+            <label>Desnível piso a piso (cm)
+              <input type="number" name="desnivel" min="40" max="1200" step="0.5" required>
+            </label>
+            <label>Largura da escada (cm)
+              <input type="number" name="largura" min="60" max="400" step="1" required>
+            </label>
+            <label>Espelho desejado (cm)
+              <input type="number" name="espelhoAlvo" min="16" max="18" step="0.1">
+            </label>
+            <label>Piso (cm) <small>vazio = automático</small>
+              <input type="number" name="piso" min="25" max="35" step="0.5" placeholder="auto">
+            </label>
+            <label data-tipos="longitudinal plissada">Patamar inferior (cm)
+              <input type="number" name="patamarInf" min="0" step="1">
+            </label>
+            <label data-tipos="longitudinal plissada">Patamar superior (cm)
+              <input type="number" name="patamarSup" min="0" step="1">
+            </label>
+            <label data-tipos="dois_lances autoportante">Comprimento do patamar (cm)
+              <input type="number" name="patamar" min="80" step="1">
+            </label>
+            <label data-tipos="dois_lances autoportante">Vazio entre lances (cm)
+              <input type="number" name="vazio" min="0" step="1">
+            </label>
+            <label>Largura das vigas de apoio (cm)
+              <input type="number" name="apoioViga" min="10" max="60" step="1">
+            </label>
+            <label>Altura das vigas (cm)
+              <input type="number" name="alturaViga" min="20" max="120" step="1">
+            </label>
+            <label data-tipos="longitudinal plissada dois_lances L U autoportante">Apoio do 1º lance
+              <select name="apoioInicial">
+                <option value="viga">Viga / cintamento</option>
+                <option value="solo">Direto no solo (“pé”)</option>
+              </select>
+            </label>
+            <label data-tipos="L">Arranjo dos apoios (escada em L)
+              <select name="arranjoL">
+                <option value="auto">Automático (menor momento)</option>
+                <option value="A">A – lance 2 apoiado no lance 1</option>
+                <option value="B">B – lance 1 apoiado no lance 2</option>
+              </select>
+            </label>
+            <label data-tipos-not="balanco">Espessura h (cm) <small>vazio = otimizar</small>
+              <input type="number" name="espessura" min="8" max="40" step="1" placeholder="auto">
+            </label>
+            <label data-tipos="balanco">Espessura do degrau (cm)
+              <input type="number" name="espessuraDegrau" min="8" max="25" step="1">
+            </label>
+            <label>Comprimento disponível (cm) <small>opcional</small>
+              <input type="number" name="disponivel" min="0" step="1" placeholder="—">
+            </label>
+          </div>
+          <button type="button" class="botao secundario largo" id="bt-medir">📏 Medir no local com a câmera (AR)</button>
+          <p class="nota" id="nota-medir"></p>
+        </fieldset>
+
+        <fieldset>
+          <legend>3. Materiais</legend>
+          <div class="grade-campos">
+            <label>Concreto (fck)
+              <select name="fck">
+                <option value="20">C20</option><option value="25">C25</option><option value="30">C30</option>
+                <option value="35">C35</option><option value="40">C40</option><option value="45">C45</option><option value="50">C50</option>
+              </select>
+            </label>
+            <label>Aço
+              <select name="fyk"><option value="500">CA-50</option></select>
+            </label>
+            <label>Cobrimento (cm)
+              <select name="cobrimento">
+                <option value="2">2,0 – CAA I</option>
+                <option value="2.5">2,5 – CAA II</option>
+                <option value="3.5">3,5 – CAA III</option>
+                <option value="4.5">4,5 – CAA IV</option>
+              </select>
+            </label>
+            <label>Agregado graúdo (αE)
+              <select name="agregado">
+                <option value="1.2">Basalto / diabásio (1,2)</option>
+                <option value="1">Granito / gnaisse (1,0)</option>
+                <option value="0.9">Calcário (0,9)</option>
+                <option value="0.7">Arenito (0,7)</option>
+              </select>
+            </label>
+            <label>Peso específico do concreto (kN/m³)
+              <input type="number" name="gammaC" min="20" max="30" step="0.5">
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>4. Cargas</legend>
+          <div class="grade-campos">
+            <label class="largo">Uso da edificação (sobrecarga – Quadro 2.1)
+              <select name="sobrecargaId" id="sel-sobrecarga"></select>
+            </label>
+            <label>Pavimentação e revestimento (kN/m²)
+              <input type="number" name="revestimento" min="0" step="0.1">
+            </label>
+            <label class="check largo" data-tipos-not="balanco transversal autoportante">
+              <input type="checkbox" name="ppLanceEmTudo"> Usar o peso próprio do lance em toda a escada (recomendado)
+            </label>
+            <label class="check largo">
+              <input type="checkbox" name="parapeito.ativo"> Parapeito de alvenaria sobre a escada
+            </label>
+            <label class="largo" data-parapeito>Alvenaria (Tabela 2.1)
+              <select name="parapeito.alvenariaId" id="sel-alvenaria"></select>
+            </label>
+            <label data-parapeito>Revestimento por face
+              <select name="parapeito.revestFace">
+                <option value="0">0 cm</option><option value="1">1 cm</option><option value="2">2 cm</option>
+              </select>
+            </label>
+            <label data-parapeito>Altura do parapeito (m)
+              <input type="number" name="parapeito.altura" min="0.3" max="3" step="0.05">
+            </label>
+            <label data-parapeito>Lados com parapeito
+              <select name="parapeito.lados"><option value="1">1</option><option value="2">2</option></select>
+            </label>
+            <label class="largo" data-parapeito>Força horizontal no parapeito (Tabela 2.2)
+              <select name="forcaHorizontalId" id="sel-forca"></select>
+            </label>
+            <label data-solo>Tensão admissível do solo (kgf/cm²)
+              <input type="number" name="tensaoSolo" min="0.1" max="5" step="0.05">
+            </label>
+          </div>
+        </fieldset>
+        <div class="barra-calcular">
+          <button type="submit" class="botao primario largo">Calcular escada</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ============================== 3D / AR -->
+    <section id="aba-ar" class="aba" role="tabpanel">
+      <div class="painel-3d">
+        <div id="visualizador" class="visualizador" aria-label="Modelo 3D da escada"></div>
+        <div class="controles-3d">
+          <label class="check"><input type="checkbox" id="chk-armadura"> Mostrar armaduras</label>
+          <span id="dim-3d" class="nota"></span>
+        </div>
+      </div>
+      <div class="bloco-ar">
+        <h2>Ver a escada no local (Realidade Aumentada)</h2>
+        <p>Aponte a câmera do celular para o piso onde nasce o primeiro degrau, toque para posicionar a escada em
+          <b>escala real</b> e gire até alinhar com o ambiente. No Android (Chrome) também é possível <b>medir</b>
+          o desnível e o comprimento disponível e enviar as medidas para o cálculo.</p>
+        <div class="acoes-ar">
+          <button type="button" class="botao primario" id="bt-ar">Abrir câmera (AR)</button>
+          <button type="button" class="botao" id="bt-glb">Baixar modelo 3D (.glb)</button>
+        </div>
+        <p class="nota" id="ar-suporte"></p>
+        <div id="mv-container" class="mv-container" hidden></div>
+      </div>
+    </section>
+
+    <!-- ============================== RESULTADOS -->
+    <section id="aba-resultados" class="aba" role="tabpanel">
+      <div id="res-resumo"></div>
+      <h2>Verificações geométricas</h2>
+      <div id="res-verif"></div>
+      <h2>Dimensionamento</h2>
+      <div id="res-lances"></div>
+      <h2>Quadro de ferros</h2>
+      <div id="res-quadro"></div>
+    </section>
+
+    <!-- ============================== DETALHAMENTO -->
+    <section id="aba-detalhamento" class="aba" role="tabpanel">
+      <div id="desenhos"></div>
+    </section>
+
+    <!-- ============================== MEMORIAL -->
+    <section id="aba-memorial" class="aba memorial" role="tabpanel">
+      <div id="memorial"></div>
+    </section>
+  </main>
+
+  <!-- Overlay da sessão AR (WebXR DOM overlay) -->
+  <div id="ar-overlay" class="ar-overlay" hidden>
+    <div class="ar-topo">
+      <p id="ar-status">Movimente o celular devagar para detectar o piso…</p>
+      <button type="button" class="botao" id="ar-sair">✕ Sair</button>
+    </div>
+    <div id="ar-medida" class="ar-medida" hidden>
+      <p id="ar-medida-txt"></p>
+      <div class="acoes-ar">
+        <button type="button" class="botao" id="ar-usar-desnivel">Usar como desnível</button>
+        <button type="button" class="botao" id="ar-usar-comp">Usar como comprimento disponível</button>
+      </div>
+    </div>
+    <div class="ar-base">
+      <div class="segmentado" role="group" aria-label="Modo">
+        <button type="button" id="ar-modo-pos" aria-pressed="true">Posicionar</button>
+        <button type="button" id="ar-modo-med" aria-pressed="false">Medir</button>
+      </div>
+      <div class="acoes-ar">
+        <button type="button" class="botao" id="ar-girar-e" aria-label="Girar à esquerda">⟲ 15°</button>
+        <button type="button" class="botao" id="ar-girar-1e" aria-label="Girar 1 grau à esquerda">−1°</button>
+        <button type="button" class="botao" id="ar-girar-1d" aria-label="Girar 1 grau à direita">+1°</button>
+        <button type="button" class="botao" id="ar-girar-d" aria-label="Girar à direita">15° ⟳</button>
+      </div>
+      <label class="ar-opac">Transparência <input type="range" id="ar-opac" min="0.2" max="1" step="0.05" value="0.85"></label>
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

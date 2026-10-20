@@ -70,6 +70,12 @@ Temos também alguns prints dos códigos:
 ```
 ---
 
+## 🪜 Calculadora de Escadas de Concreto Armado
+
+Aplicação web para dimensionar escadas (geometria, cargas, armaduras, detalhamento, memorial) com visualização 3D e em Realidade Aumentada no celular. Veja [`calculadora_escadas/`](calculadora_escadas/README.md).
+
+---
+
  🚀 Tecnologias Utilizadas
 O projeto foi desenvolvido com as seguintes tecnologias:
 

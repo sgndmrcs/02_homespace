@@ -1,0 +1,13 @@
+{
+  "name": "Calculadora de Escadas de Concreto Armado",
+  "short_name": "Escadas",
+  "description": "Geometria, cargas, armaduras, detalhamento e AR de escadas de concreto armado.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f4f5f7",
+  "theme_color": "#1c3d5a",
+  "lang": "pt-BR",
+  "icons": [{ "src": "icons/icone.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}
